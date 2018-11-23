@@ -2,29 +2,33 @@ package com.walkud.app.rx
 
 import android.os.Looper
 import com.orhanobut.logger.Logger
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 
 /**
  * 二次封装Subscriber
  * Created by Zhuliya on 2018/11/8
  */
-abstract class RxSubscribe<T> : Subscriber<T> {
+abstract class RxSubscribe<T> : Observer<T> {
 
     override fun onComplete() {
     }
 
-    override fun onSubscribe(s: Subscription?) {
+    override fun onSubscribe(d: Disposable) {
     }
 
     override fun onNext(t: T) {
-        call(t)
+        try {
+            call(t)
+        } catch (e: Exception) {
+            onError(e)
+        }
     }
 
-    override fun onError(t: Throwable?) {
-        Logger.e("isUiThread:${Looper.getMainLooper() == Looper.myLooper()}", t)
+    override fun onError(e: Throwable) {
+        Logger.e("isUiThread:${Looper.getMainLooper() == Looper.myLooper()}", e)
     }
 
-    abstract fun call(t: T)
+    abstract fun call(result: T)
 
 }

@@ -8,7 +8,6 @@ import android.view.animation.Animation
 import com.walkud.app.App
 import com.walkud.app.R
 import com.walkud.app.mvp.base.MvcActivity
-import com.walkud.app.mvp.ui.MainActivity
 import com.walkud.app.utils.AppUtils
 import com.zhy.m.permission.MPermissions
 import com.zhy.m.permission.PermissionDenied
@@ -35,12 +34,16 @@ class SplashActivity : MvcActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
 
         init()
     }
 
-    fun init() {
+    override fun getLayoutId() = R.layout.activity_splash
+
+    /**
+     * 初始化
+     */
+    private fun init() {
         tv_app_name.typeface = textTypeface
         tv_splash_desc.typeface = descTypeFace
         tv_version_name.text = "v${AppUtils.getVerName(applicationContext)}"

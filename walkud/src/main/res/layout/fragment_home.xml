@@ -19,6 +19,7 @@
 
         <com.scwang.smartrefresh.header.MaterialHeader
             android:layout_width="match_parent"
+            app:mhShowBezierWave="true"
             android:layout_height="wrap_content" />
 
         <FrameLayout

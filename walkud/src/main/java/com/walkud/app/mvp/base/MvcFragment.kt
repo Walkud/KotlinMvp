@@ -1,28 +1,185 @@
 package com.walkud.app.mvp.base
 
 import android.content.Intent
+import android.os.Bundle
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import com.orhanobut.logger.Logger
 import com.trello.rxlifecycle2.components.support.RxFragment
+import com.walkud.app.rx.transformer.EmptyTransformer
+import com.walkud.app.rx.transformer.ProgressTransformer
+import io.reactivex.ObservableTransformer
 
 /**
  * Mvc Fragment 基类
  * Created by Zhuliya on 2018/11/8
  */
-open class MvcFragment : RxFragment() {
+abstract class MvcFragment : RxFragment() {
+
+    protected var mContentView: View? = null
+    private var mIsLoadedData = false
+
+    /**
+     * 创建View
+     */
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        // 避免多次从xml中加载布局文件
+        if (mContentView == null) {
+            mContentView = LayoutInflater.from(activity).inflate(getLayoutId(), null)
+        } else {
+            val parent = mContentView!!.parent as ViewGroup
+            parent.removeView(mContentView)
+        }
+        return mContentView!!
+    }
+
+    /**
+     * 创建View完成，调用子类初始化，避免Kotlin在onCreateView中直接使用控件出现空指针
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView(savedInstanceState, mContentView!!)
+        setListener()
+        processLogic(savedInstanceState)
+    }
+
+    /**
+     * 设置用户可见状态
+     */
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isResumed) {
+            handleOnVisibilityChangedToUser(isVisibleToUser)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (userVisibleHint) {
+            handleOnVisibilityChangedToUser(true)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (userVisibleHint) {
+            handleOnVisibilityChangedToUser(false)
+        }
+    }
+
+    /**
+     * 处理对用户是否可见
+     *
+     * @param isVisibleToUser
+     */
+    private fun handleOnVisibilityChangedToUser(isVisibleToUser: Boolean) {
+
+        if (isVisibleToUser) {
+            // 对用户可见
+            if (!mIsLoadedData) {
+                Logger.d(javaClass.simpleName + " 懒加载一次")
+                mIsLoadedData = true
+                onLazyLoadOnce()
+            }
+            Logger.d(javaClass.simpleName + " 对用户可见")
+            onVisibleToUser()
+        } else {
+            // 对用户不可见
+            Logger.d(javaClass.simpleName + " 对用户不可见")
+            onInvisibleToUser()
+        }
+    }
+
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
+    open fun onLazyLoadOnce() {}
+
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
+    open fun onVisibleToUser() {}
+
+    /**
+     * 对用户不可见时触发该方法
+     */
+    open fun onInvisibleToUser() {}
+
+    /**
+     * 获取RootLayout布局Id
+     */
+    @LayoutRes
+    protected abstract fun getLayoutId(): Int
+
+    /**
+     * 初始化 View 控件
+     */
+    abstract fun initView(savedInstanceState: Bundle?, rootView: View)
+
+    /**
+     * 给 View 控件添加事件监听器
+     */
+    open fun setListener() {}
+
+    /**
+     * 处理业务逻辑，状态恢复等操作
+     *
+     * @param savedInstanceState
+     */
+    open fun processLogic(savedInstanceState: Bundle?) {}
+
+    /**
+     * 跳转
+     * @param cls 类
+     */
+    fun forward(cls: Class<*>) {
+        activity?.apply {
+            forward(Intent(activity, cls))
+        }
+    }
+
+    /**
+     * 跳转
+     * @param intent
+     */
+    fun forward(intent: Intent) {
+        startActivity(intent)
+    }
+
+    /**
+     * 跳转并关闭当前页面
+     * @param intent
+     */
+    fun forwardAndFinish(cls: Class<*>) {
+        forward(cls)
+        activity?.finish()
+    }
+
+    /**
+     * 跳转并关闭当前页面
+     */
+    fun forwardAndFinish(intent: Intent) {
+        forward(intent)
+        activity?.finish()
+    }
+
 
     /**
      * 显示Toast
      * @param resId 文本资源Id
      */
-    fun toast(resId: Int) {
-        toast(getString(resId))
+    fun showToast(resId: Int) {
+        showToast(getString(resId))
     }
 
     /**
      * 显示Toast
      * @param msg 文本
      */
-    fun toast(msg: String) {
+    fun showToast(msg: String) {
         Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
     }
 
@@ -41,4 +198,22 @@ open class MvcFragment : RxFragment() {
     fun forword(intent: Intent) {
         startActivity(intent)
     }
+
+    /**
+     * 获取异步进度加载事务，子类复写
+     * 默认返回 空事务或者默认进度框事务
+     */
+    open fun <VT> getProgressTransformer(): ObservableTransformer<VT, VT> {
+        if (activity == null) {
+            //防止空指针
+            return EmptyTransformer()
+        }
+        return ProgressTransformer(activity!!)
+    }
+
+    /**
+     * 获取异步进度下拉或上拉加载事务，子类复写
+     * 默认返回 空事务
+     */
+    open fun <VT> getSmartRefreshTransformer(): ObservableTransformer<VT, VT> = EmptyTransformer()
 }
