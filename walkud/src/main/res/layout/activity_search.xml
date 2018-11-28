@@ -42,7 +42,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp">
 
-                <com.hazz.kotlinmvp.view.ClearEditText
+                <com.walkud.app.view.ClearEditText
                     android:id="@+id/et_search_view"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -62,7 +62,9 @@
                     android:textColorHint="@color/color_darker_gray"
                     android:textCursorDrawable="@drawable/et_cursor"
                     android:textSize="12sp"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+                    tools:ignore="RtlHardcoded,RtlSymmetry" >
+                    <requestFocus/>
+                </com.walkud.app.view.ClearEditText>
 
                 <TextView
                     android:id="@+id/tv_cancel"

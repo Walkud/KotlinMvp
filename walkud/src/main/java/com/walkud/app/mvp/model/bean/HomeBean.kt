@@ -14,15 +14,23 @@ data class HomeBean(val issueList: ArrayList<Issue>, val nextPageUrl: String, va
         data class Item(val type: String, val data: Data?, val tag: String) : Serializable, MultiItemEntity {
 
             companion object {
-                const val ITEM_TYPE_BANNER = 1    //Banner 类型
-                const val ITEM_TYPE_TEXT_HEADER = 2   //textHeader
-                const val ITEM_TYPE_CONTENT = 3    //item
+                //默认
+                const val ITEM_TYPE_CONTENT = 0    //item
+
+                //Home
+                const val ITEM_TYPE_TEXT_HEADER = 1   //textHeader
+
+                //详情
+                const val ITEM_TYPE_TEXT_CARD = 11    //textCard
+                const val ITEM_TYPE_VIDEO_SMALL_CARD = 12    //textCard
             }
 
             override fun getItemType(): Int {
                 var itype = ITEM_TYPE_CONTENT
                 when (type) {
                     "textHeader" -> itype = ITEM_TYPE_TEXT_HEADER
+                    "textCard" -> itype = ITEM_TYPE_TEXT_CARD
+                    "videoSmallCard" -> itype = ITEM_TYPE_VIDEO_SMALL_CARD
                 }
 
                 return itype

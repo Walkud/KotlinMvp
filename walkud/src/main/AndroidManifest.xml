@@ -36,6 +36,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".mvp.ui.activity.MainActivity" />
+        <activity
+            android:name=".mvp.ui.activity.SearchActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".mvp.ui.activity.VideoDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
     </application>
 

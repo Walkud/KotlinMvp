@@ -32,4 +32,25 @@ class MainModel {
      * 获取首页列表数据
      */
     fun getMoreHomeData(url: String): Observable<HomeBean> = RetrofitManager.service.getMoreHomeData(url).compose(FilterAdTransformer())
+
+
+    /**
+     * 请求热门关键词的数据
+     */
+    fun getHotWordData(): Observable<ArrayList<String>> = RetrofitManager.service.getHotWord()
+
+    /**
+     * 搜索关键词返回的结果
+     */
+    fun getSearchResult(words: String): Observable<HomeBean.Issue> = RetrofitManager.service.getSearchData(words)
+
+    /**
+     * 搜索结果列表加载更多数据
+     */
+    fun getIssueData(url: String): Observable<HomeBean.Issue> = RetrofitManager.service.getIssueData(url)
+
+    /**
+     * 根据item id获取相关视频
+     */
+    fun getRelatedData(id: Long): Observable<HomeBean.Issue> = RetrofitManager.service.getRelatedData(id)
 }

@@ -32,18 +32,12 @@ class SplashActivity : MvcActivity() {
         descTypeFace = Typeface.createFromAsset(App.instance.assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        init()
-    }
-
     override fun getLayoutId() = R.layout.activity_splash
 
     /**
-     * 初始化
+     * 初始化View
      */
-    private fun init() {
+    override fun initView(savedInstanceState: Bundle?) {
         tv_app_name.typeface = textTypeface
         tv_splash_desc.typeface = descTypeFace
         tv_version_name.text = "v${AppUtils.getVerName(applicationContext)}"

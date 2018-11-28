@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  * Created by Zhuliya on 2018/11/19
  */
 class MainActivity : MvpActivity<MainPresenter>() {
+
     private val mTitles = arrayOf("每日精选", "发现", "热门", "我的")
 
     // 未被选中的图标
@@ -33,32 +34,27 @@ class MainActivity : MvpActivity<MainPresenter>() {
 //    private var mMineFragment: MineFragment? = null
 //
     private var mExitTime: Long = 0
+    //默认为0
+    private var mIndex = 0
 
     override fun getP(): MainPresenter {
         return MainPresenter().apply { view = this@MainActivity }
     }
 
 
-    //默认为0
-    private var mIndex = 0
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun initView(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt("currTabIndex")
         }
-        super.onCreate(savedInstanceState)
         initTab()
         tab_layout.currentTab = mIndex
         switchFragment(mIndex)
-
     }
 
     /**
      * 获取rootviewId
      */
     override fun getLayoutId() = R.layout.activity_main
-
 
     /**
      * 初始化底部菜单

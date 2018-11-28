@@ -21,7 +21,6 @@ class HomeAdapter(data: List<HomeBean.Issue.Item> = ArrayList()) :
      * 初始化布局类型
      */
     init {
-        addItemType(HomeBean.Issue.Item.ITEM_TYPE_BANNER, R.layout.item_home_banner)
         addItemType(HomeBean.Issue.Item.ITEM_TYPE_TEXT_HEADER, R.layout.item_home_header)
         addItemType(HomeBean.Issue.Item.ITEM_TYPE_CONTENT, R.layout.item_home_content)
     }

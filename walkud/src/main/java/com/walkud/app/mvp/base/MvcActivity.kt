@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.walkud.app.R
+import com.walkud.app.common.extensions.closeKeyBoard
 import com.walkud.app.rx.transformer.EmptyTransformer
 import com.walkud.app.rx.transformer.ProgressTransformer
 import io.reactivex.ObservableTransformer
@@ -22,6 +23,10 @@ abstract class MvcActivity : RxAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+
+        initView(savedInstanceState)
+        addListener()
+        processLogic(savedInstanceState)
     }
 
     /**
@@ -29,6 +34,23 @@ abstract class MvcActivity : RxAppCompatActivity() {
      */
     @LayoutRes
     protected abstract fun getLayoutId(): Int
+
+    /**
+     * 初始化 View 控件
+     */
+    abstract fun initView(savedInstanceState: Bundle?)
+
+    /**
+     * 给 View 控件添加事件监听器
+     */
+    open fun addListener() {}
+
+    /**
+     * 处理业务逻辑，状态恢复等操作
+     *
+     * @param savedInstanceState
+     */
+    open fun processLogic(savedInstanceState: Bundle?) {}
 
     /**
      * 显示Toast
@@ -51,6 +73,7 @@ abstract class MvcActivity : RxAppCompatActivity() {
      * @param cls 类
      */
     fun forward(cls: Class<*>) {
+        closeKeyBoard()
         forward(Intent(this, cls))
     }
 
@@ -59,6 +82,7 @@ abstract class MvcActivity : RxAppCompatActivity() {
      * @param intent
      */
     fun forward(intent: Intent) {
+        closeKeyBoard()
         startActivity(intent)
     }
 
@@ -76,6 +100,14 @@ abstract class MvcActivity : RxAppCompatActivity() {
      */
     fun forwardAndFinish(intent: Intent) {
         forward(intent)
+        finish()
+    }
+
+    /**
+     * 回退
+     */
+    fun backward() {
+        closeKeyBoard()
         finish()
     }
 

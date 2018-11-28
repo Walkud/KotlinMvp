@@ -29,9 +29,9 @@ class HomePresenter : BasePresenter<HomeFragment, MainModel>() {
 
     /**
      * 获取列表数据
-     * 如果
      */
     fun loadListData() {
+        //如果下一页url为空，则获取首页列表数据，否则为加载更多
         val observable: Observable<HomeBean> = if (nextPageUrl == null) {
             model.getFirstHomeData()
         } else {
@@ -46,14 +46,16 @@ class HomePresenter : BasePresenter<HomeFragment, MainModel>() {
                         if (homeBean == null) {
                             //第一页
                             homeBean = result
+                            //更新BannerUI
+                            view.updateBannerUi(result.bannerData?.issueList!![0].itemList)
                         } else {
                             //加载更多，添加至缓存列表中
                             homeBean!!.issueList[0].itemList.addAll(result.issueList[0].itemList)
                         }
-                        
+
                         nextPageUrl = result.nextPageUrl
 
-                        view.updateListUI(homeBean!!.issueList[0].itemList)
+                        view.updateListUi(homeBean!!.issueList[0].itemList)
                     }
 
                     override fun onError(e: Throwable) {

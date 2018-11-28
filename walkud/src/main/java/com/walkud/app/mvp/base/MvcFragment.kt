@@ -42,7 +42,7 @@ abstract class MvcFragment : RxFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(savedInstanceState, mContentView!!)
-        setListener()
+        addListener()
         processLogic(savedInstanceState)
     }
 
@@ -122,7 +122,7 @@ abstract class MvcFragment : RxFragment() {
     /**
      * 给 View 控件添加事件监听器
      */
-    open fun setListener() {}
+    open fun addListener() {}
 
     /**
      * 处理业务逻辑，状态恢复等操作
