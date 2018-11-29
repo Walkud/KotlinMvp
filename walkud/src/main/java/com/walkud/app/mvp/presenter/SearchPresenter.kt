@@ -68,7 +68,7 @@ class SearchPresenter : BasePresenter<SearchActivity, MainModel>() {
      * 加载更多
      */
     fun loadMoreData() {
-        model.getIssueData(nextPageUrl!!)
+        model.getSearchIssueData(nextPageUrl!!)
                 .compose(NetTransformer())
                 .subscribe(object : RxSubscribe<HomeBean.Issue>() {
                     override fun call(result: HomeBean.Issue) {

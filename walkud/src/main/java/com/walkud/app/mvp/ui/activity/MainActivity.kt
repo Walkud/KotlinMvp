@@ -10,6 +10,7 @@ import com.walkud.app.R
 import com.walkud.app.mvp.base.MvpActivity
 import com.walkud.app.mvp.model.bean.TabEntity
 import com.walkud.app.mvp.presenter.MainPresenter
+import com.walkud.app.mvp.ui.fragment.DiscoveryFragment
 import com.walkud.app.mvp.ui.fragment.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,8 +30,8 @@ class MainActivity : MvpActivity<MainPresenter>() {
     private val mTabEntities = ArrayList<CustomTabEntity>()
 
     private var mHomeFragment: HomeFragment? = null
-    //    private var mDiscoveryFragment: DiscoveryFragment? = null
-//    private var mHotFragment: HotFragment? = null
+    private var mDiscoveryFragment: DiscoveryFragment? = null
+    //    private var mHotFragment: HotFragment? = null
 //    private var mMineFragment: MineFragment? = null
 //
     private var mExitTime: Long = 0
@@ -91,12 +92,13 @@ class MainActivity : MvpActivity<MainPresenter>() {
                 mHomeFragment = it
                 transaction.add(R.id.fl_container, it, "home")
             }
-//            1  //发现
-//            -> mDiscoveryFragment?.let {
-//                transaction.show(it)
-//            } ?: DiscoveryFragment.getInstance(mTitles[position]).let {
-//                mDiscoveryFragment = it
-//                transaction.add(R.id.fl_container, it, "discovery") }
+            1  //发现
+            -> mDiscoveryFragment?.let {
+                transaction.show(it)
+            } ?: DiscoveryFragment.getInstance(mTitles[position]).let {
+                mDiscoveryFragment = it
+                transaction.add(R.id.fl_container, it, "discovery")
+            }
 //            2  //热门
 //            -> mHotFragment?.let {
 //                transaction.show(it)
@@ -127,7 +129,7 @@ class MainActivity : MvpActivity<MainPresenter>() {
      */
     private fun hideFragments(transaction: FragmentTransaction) {
         mHomeFragment?.let { transaction.hide(it) }
-//        mDiscoveryFragment?.let { transaction.hide(it) }
+        mDiscoveryFragment?.let { transaction.hide(it) }
 //        mHotFragment?.let { transaction.hide(it) }
 //        mMineFragment?.let { transaction.hide(it) }
     }

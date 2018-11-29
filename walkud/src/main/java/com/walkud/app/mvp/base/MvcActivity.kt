@@ -140,4 +140,8 @@ abstract class MvcActivity : RxAppCompatActivity() {
      */
     open fun <VT> getSmartRefreshTransformer(): ObservableTransformer<VT, VT> = EmptyTransformer()
 
+    /**
+     * 获取进度、错误、内容切换View事务，子类复写
+     */
+    open fun <VT> multipleStatusViewTransformer(): ObservableTransformer<VT, VT> = EmptyTransformer()
 }
