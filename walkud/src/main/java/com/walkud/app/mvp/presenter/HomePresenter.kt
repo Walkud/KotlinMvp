@@ -8,7 +8,7 @@ import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.mvp.ui.fragment.HomeFragment
 import com.walkud.app.rx.RxSubscribe
 import com.walkud.app.rx.transformer.NetTransformer
-import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 
 /**
  * Created by Zhuliya on 2018/11/20
@@ -20,48 +20,50 @@ class HomePresenter : BasePresenter<HomeFragment, MainModel>() {
 
     /**
      * 刷新列表数据
+     * 使用状态布局切换事务
      */
-    fun refreshListData() {
-        homeBean = null
-        nextPageUrl = null
-        loadListData()
-    }
+    fun refreshListData(transformer: ObservableTransformer<HomeBean, HomeBean>) {
 
-    /**
-     * 获取列表数据
-     */
-    fun loadListData() {
-        //如果下一页url为空，则获取首页列表数据，否则为加载更多
-        val observable: Observable<HomeBean> = if (nextPageUrl == null) {
-            model.getFirstHomeData()
-        } else {
-            model.getMoreHomeData(nextPageUrl!!)
-        }
-
-        observable.compose(NetTransformer())
-                .compose(view.getSmartRefreshTransformer())
+        model.getFirstHomeData()
+                .compose(NetTransformer())
+                .compose(transformer)
                 .compose(bindFragmentUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(object : RxSubscribe<HomeBean>() {
                     override fun call(result: HomeBean) {
-                        if (homeBean == null) {
-                            //第一页
-                            homeBean = result
-                            //更新BannerUI
-                            view.updateBannerUi(result.bannerData?.issueList!![0].itemList)
-                        } else {
-                            //加载更多，添加至缓存列表中
-                            homeBean!!.issueList[0].itemList.addAll(result.issueList[0].itemList)
-                        }
-
+                        homeBean = result
                         nextPageUrl = result.nextPageUrl
 
+                        //更新BannerUI
+                        view.updateBannerUi(result.bannerData?.issueList!![0].itemList)
                         view.updateListUi(homeBean!!.issueList[0].itemList)
                     }
 
                     override fun onError(e: Throwable) {
                         super.onError(e)
                         view.showToast(ExceptionHandle.handleException(e))
-                        view.showError(ExceptionHandle.errorCode)
+                    }
+                })
+    }
+
+    /**
+     * 获取更多列表数据
+     */
+    fun loadMoreListData() {
+        model.getMoreHomeData(nextPageUrl!!).compose(NetTransformer())
+                .compose(view.getSmartRefreshTransformer())
+                .compose(bindFragmentUntilEvent(FragmentEvent.DESTROY))
+                .subscribe(object : RxSubscribe<HomeBean>() {
+                    override fun call(result: HomeBean) {
+
+                        nextPageUrl = result.nextPageUrl
+                        //加载更多，添加至缓存列表中
+                        homeBean!!.issueList[0].itemList.addAll(result.issueList[0].itemList)
+                        view.updateListUi(homeBean!!.issueList[0].itemList)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        super.onError(e)
+                        view.showToast(ExceptionHandle.handleException(e))
                     }
                 })
     }

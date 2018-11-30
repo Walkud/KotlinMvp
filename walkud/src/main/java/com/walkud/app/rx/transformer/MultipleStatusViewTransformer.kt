@@ -1,6 +1,8 @@
 package com.walkud.app.rx.transformer
 
 import com.classic.common.MultipleStatusView
+import com.hazz.kotlinmvp.net.exception.ErrorStatus
+import com.walkud.app.common.exception.ExceptionHandle
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
@@ -18,17 +20,30 @@ class MultipleStatusViewTransformer<T>(var multipleStatusView: MultipleStatusVie
                     multipleStatusView?.showLoading()
                 }
                 .doOnError {
-                    finish()
+                    onError(it)
                 }.doOnComplete {
-                    finish()
+                    onComplete()
                 }
 
     }
 
     /**
-     * 加载完成，结束下拉刷新或上拉加载
+     * 加载错误,显示异常布局
      */
-    fun finish() {
+    fun onError(e: Throwable) {
+        ExceptionHandle.handleException(e)
+        if (ExceptionHandle.errorCode == ErrorStatus.NETWORK_ERROR) {
+            multipleStatusView?.showNoNetwork()
+        } else {
+            multipleStatusView?.showError()
+        }
+        multipleStatusView = null
+    }
+
+    /**
+     * 加载完成，显示内容布局
+     */
+    fun onComplete() {
         multipleStatusView?.showContent()
         multipleStatusView = null
     }

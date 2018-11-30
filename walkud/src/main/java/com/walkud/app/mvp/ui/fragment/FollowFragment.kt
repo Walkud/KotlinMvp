@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.hazz.kotlinmvp.net.exception.ErrorStatus
 import com.walkud.app.R
 import com.walkud.app.mvp.base.MvpFragment
 import com.walkud.app.mvp.model.bean.HomeBean
@@ -21,7 +20,7 @@ import io.reactivex.ObservableTransformer
 import kotlinx.android.synthetic.main.layout_recyclerview.*
 
 /**
- *  关注 UI
+ * 发现-关注 UI
  * Created by Zhuliya on 2018/11/29
  */
 class FollowFragment : MvpFragment<FollowPresenter>() {
@@ -41,7 +40,7 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
     /**
      * 获取加载进度切换事务
      */
-    override fun <VT> multipleStatusViewTransformer(): ObservableTransformer<VT, VT> {
+    override fun <VT> getMultipleStatusViewTransformer(): ObservableTransformer<VT, VT> {
         return MultipleStatusViewTransformer(multipleStatusView)
     }
 
@@ -74,6 +73,11 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
             goToVideoPlayer(view, itemData)
         }
+
+        //异常布局，点击重新加载
+        multipleStatusView.setOnRetryClickListener {
+            presenter.queryFollowList()
+        }
     }
 
     /**
@@ -90,18 +94,6 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
     fun updateListUi(issue: HomeBean.Issue) {
         loadingMore = false
         followAdapter.setNewData(issue.itemList)
-    }
-
-
-    /**
-     * 显示错误信息
-     */
-    fun showErrorUi(errorCode: Int) {
-        if (errorCode == ErrorStatus.NETWORK_ERROR) {
-            multipleStatusView.showNoNetwork()
-        } else {
-            multipleStatusView.showError()
-        }
     }
 
     /**

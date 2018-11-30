@@ -14,7 +14,6 @@ import cn.bingoogolapple.bgabanner.BGABanner
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.hazz.kotlinmvp.glide.GlideApp
-import com.hazz.kotlinmvp.net.exception.ErrorStatus
 import com.walkud.app.R
 import com.walkud.app.mvp.base.MvpFragment
 import com.walkud.app.mvp.model.bean.HomeBean
@@ -22,6 +21,7 @@ import com.walkud.app.mvp.presenter.HomePresenter
 import com.walkud.app.mvp.ui.activity.SearchActivity
 import com.walkud.app.mvp.ui.activity.VideoDetailActivity
 import com.walkud.app.mvp.ui.adapter.HomeAdapter
+import com.walkud.app.rx.transformer.MultipleStatusViewTransformer
 import com.walkud.app.rx.transformer.SmartRefreshTransformer
 import com.walkud.app.utils.StatusBarUtil
 import io.reactivex.ObservableTransformer
@@ -41,7 +41,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
 
     private var homeAdapter = HomeAdapter()
 
-    private var loadingMore = false
+    private var loadingMore = false//加载更多标记
 
     companion object {
         fun getInstance(title: String): HomeFragment {
@@ -74,13 +74,20 @@ class HomeFragment : MvpFragment<HomePresenter>() {
     }
 
     /**
+     * 获取进度、错误、内容切换View事务
+     */
+    override fun <VT> getMultipleStatusViewTransformer(): ObservableTransformer<VT, VT> {
+        return MultipleStatusViewTransformer(multipleStatusView)
+    }
+
+    /**
      * 初始化 View
      */
     override fun initView(savedInstanceState: Bundle?, rootView: View) {
         //内容跟随偏移
         mRefreshLayout.setEnableHeaderTranslationContent(true)
         mRefreshLayout.setOnRefreshListener {
-            presenter.refreshListData()
+            presenter.refreshListData(getSmartRefreshTransformer())
         }
 
         mRecyclerView.adapter = homeAdapter
@@ -113,7 +120,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
                     if (firstVisibleItem + childCount == itemCount) {
                         if (!loadingMore) {
                             loadingMore = true
-                            presenter.loadListData()
+                            presenter.loadMoreListData()
                         }
                     }
                 }
@@ -153,6 +160,11 @@ class HomeFragment : MvpFragment<HomePresenter>() {
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
             goToVideoPlayer(view, itemData)
         }
+
+        //异常布局，点击重新加载
+        multipleStatusView.setOnRetryClickListener {
+            presenter.refreshListData(getMultipleStatusViewTransformer())
+        }
     }
 
     /**
@@ -160,7 +172,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
      */
     override fun onLazyLoadOnce() {
         super.onLazyLoadOnce()
-        mRefreshLayout.autoRefresh(0)
+        presenter.refreshListData(getMultipleStatusViewTransformer())
     }
 
     private fun openSearchActivity() {
@@ -213,17 +225,6 @@ class HomeFragment : MvpFragment<HomePresenter>() {
         loadingMore = false
         multipleStatusView.showContent()
         homeAdapter.setNewData(data)
-    }
-
-    /**
-     * 显示错误信息
-     */
-    fun showError(errorCode: Int) {
-        if (errorCode == ErrorStatus.NETWORK_ERROR) {
-            multipleStatusView.showNoNetwork()
-        } else {
-            multipleStatusView.showError()
-        }
     }
 
     fun getColor(colorId: Int): Int {

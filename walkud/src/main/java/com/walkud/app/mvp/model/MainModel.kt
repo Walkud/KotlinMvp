@@ -1,5 +1,6 @@
 package com.walkud.app.mvp.model
 
+import com.walkud.app.mvp.model.bean.CategoryBean
 import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.net.RetrofitManager
 import com.walkud.app.rx.transformer.FilterAdTransformer
@@ -63,5 +64,19 @@ class MainModel {
      */
     fun getFollowIssueData(url: String): Observable<HomeBean.Issue> = RetrofitManager.service.getIssueData(url)
 
+    /**
+     * 获取分类信息
+     */
+    fun getCategoryData(): Observable<ArrayList<CategoryBean>> = RetrofitManager.service.getCategory()
 
+
+    /**
+     * 获取分类详情下的List 第一页数据
+     */
+    fun getCategoryDetailList(id: Long): Observable<HomeBean.Issue> = RetrofitManager.service.getCategoryDetailList(id)
+
+    /**
+     * 获取分类详情列表更多数据
+     */
+    fun getMoreCategoryData(url: String): Observable<HomeBean.Issue> = RetrofitManager.service.getIssueData(url)
 }

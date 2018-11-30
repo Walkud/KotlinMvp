@@ -12,7 +12,7 @@ import com.walkud.app.rx.transformer.NetTransformer
 import io.reactivex.ObservableTransformer
 
 /**
- * 关注Presenter
+ * 发现-关注Presenter
  * Created by Zhuliya on 2018/11/29
  */
 class FollowPresenter : BasePresenter<FollowFragment, MainModel>() {
@@ -23,7 +23,7 @@ class FollowPresenter : BasePresenter<FollowFragment, MainModel>() {
     /**
      * 是否为首页
      */
-    fun isFirstPage() = (issue == null)
+    private fun isFirstPage() = (issue == null)
 
     /**
      *  获取关注数据
@@ -37,11 +37,11 @@ class FollowPresenter : BasePresenter<FollowFragment, MainModel>() {
         }
 
         val transformer: ObservableTransformer<HomeBean.Issue, HomeBean.Issue> =
-                if (isFirstPage()) view.multipleStatusViewTransformer() else EmptyTransformer()
+                if (isFirstPage()) view.getMultipleStatusViewTransformer() else EmptyTransformer()
 
         observable
 //                .flatMap { result ->
-//                    //如果出现返回的数据类型不匹配，可以取消注释
+//                    //如果出现返回的数据类型不匹配，可以取消注释,也可以封装为事务
 //                    //由于接口不能保证返回的类型，所以在这里对源数据进行处理，当然，也可以将该代码放在Model中进行处理
 //                    val iterator = result.itemList.iterator()
 //                    while (iterator.hasNext()) {
@@ -72,11 +72,6 @@ class FollowPresenter : BasePresenter<FollowFragment, MainModel>() {
                     override fun onError(e: Throwable) {
                         super.onError(e)
                         view.showToast(ExceptionHandle.handleException(e))
-                        if (issue == null) {
-                            //第一次加载错误，显示错误界面
-                            view.showErrorUi(ExceptionHandle.errorCode)
-                        }
-
                     }
                 })
     }
