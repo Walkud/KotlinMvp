@@ -30,8 +30,9 @@ abstract class MvcFragment : RxFragment() {
         if (mContentView == null) {
             mContentView = LayoutInflater.from(activity).inflate(getLayoutId(), null)
         } else {
-            val parent = mContentView!!.parent as ViewGroup
-            parent.removeView(mContentView)
+            mContentView!!.parent?.let {
+                (it as ViewGroup).removeView(mContentView)
+            }
         }
         return mContentView!!
     }
@@ -155,7 +156,7 @@ abstract class MvcFragment : RxFragment() {
      */
     fun forwardAndFinish(cls: Class<*>) {
         forward(cls)
-        activity?.finish()
+        backward()
     }
 
     /**
@@ -163,9 +164,15 @@ abstract class MvcFragment : RxFragment() {
      */
     fun forwardAndFinish(intent: Intent) {
         forward(intent)
-        activity?.finish()
+        backward()
     }
 
+    /**
+     * 回退
+     */
+    fun backward() {
+        activity?.finish()
+    }
 
     /**
      * 显示Toast

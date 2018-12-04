@@ -2,6 +2,7 @@ package com.walkud.app.mvp.model
 
 import com.walkud.app.mvp.model.bean.CategoryBean
 import com.walkud.app.mvp.model.bean.HomeBean
+import com.walkud.app.mvp.model.bean.TabInfoBean
 import com.walkud.app.net.RetrofitManager
 import com.walkud.app.rx.transformer.FilterAdTransformer
 import io.reactivex.Observable
@@ -79,4 +80,14 @@ class MainModel {
      * 获取分类详情列表更多数据
      */
     fun getMoreCategoryData(url: String): Observable<HomeBean.Issue> = RetrofitManager.service.getIssueData(url)
+
+    /**
+     * 获取热门-排行列表Issue数据
+     */
+    fun getHotRankData(url: String): Observable<HomeBean.Issue> = RetrofitManager.service.getIssueData(url)
+
+    /**
+     * 获取热门 Tab 数据
+     */
+    fun getRankTabData(): Observable<TabInfoBean> = RetrofitManager.service.getRankList()
 }

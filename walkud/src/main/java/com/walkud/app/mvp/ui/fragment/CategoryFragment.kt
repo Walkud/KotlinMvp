@@ -9,6 +9,7 @@ import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.hazz.kotlinmvp.net.exception.ErrorStatus
 import com.walkud.app.R
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.mvp.base.MvpFragment
 import com.walkud.app.mvp.model.bean.CategoryBean
 import com.walkud.app.mvp.presenter.CategoryPresenter
@@ -64,7 +65,7 @@ class CategoryFragment : MvpFragment<CategoryPresenter>() {
         categoryAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
             val data = adapter.getItem(position) as CategoryBean
             val intent = Intent(activity, CategoryDetailActivity::class.java)
-            intent.putExtra(CategoryDetailActivity.BUNDLE_CATEGORY_DATA, data)
+            intent.putExtra(ExtraKey.CATEGORY_DATA, data)
             startActivity(intent)
         }
     }

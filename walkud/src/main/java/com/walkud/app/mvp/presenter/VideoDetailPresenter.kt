@@ -1,6 +1,7 @@
 package com.walkud.app.mvp.presenter
 
 import com.walkud.app.App
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.common.extensions.dataFormat
 import com.walkud.app.mvp.base.BasePresenter
 import com.walkud.app.mvp.model.MainModel
@@ -28,8 +29,8 @@ class VideoDetailPresenter : BasePresenter<VideoDetailActivity, MainModel>() {
      * 初始化
      */
     fun init() {
-        itemData = view.intent.getSerializableExtra(VideoDetailActivity.BUNDLE_VIDEO_DATA) as HomeBean.Issue.Item
-        isTransition = view.intent.getBooleanExtra(VideoDetailActivity.TRANSITION, false)
+        itemData = view.intent.getSerializableExtra(ExtraKey.VIDEO_DATA) as HomeBean.Issue.Item
+        isTransition = view.intent.getBooleanExtra(ExtraKey.TRANSITION, false)
 
         if (itemData.data == null) {
             view.showToast("数据错误")

@@ -1,14 +1,9 @@
 package com.walkud.app.mvp.ui.activity
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.hazz.kotlinmvp.glide.GlideApp
 import com.walkud.app.R
@@ -17,7 +12,9 @@ import com.walkud.app.mvp.model.bean.CategoryBean
 import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.mvp.presenter.CategoryDetailPresenter
 import com.walkud.app.mvp.ui.adapter.CategoryDetailAdapter
+import com.walkud.app.rx.transformer.MultipleStatusViewTransformer
 import com.walkud.app.utils.StatusBarUtil
+import io.reactivex.ObservableTransformer
 import kotlinx.android.synthetic.main.activity_category_detail.*
 
 /**
@@ -26,16 +23,19 @@ import kotlinx.android.synthetic.main.activity_category_detail.*
  */
 class CategoryDetailActivity : MvpActivity<CategoryDetailPresenter>() {
 
-    companion object {
-        const val BUNDLE_CATEGORY_DATA = "category_data"
-    }
-
     private val categoryDetailAdapter = CategoryDetailAdapter()
     private var loadingMore = false
 
     override fun getP() = CategoryDetailPresenter().apply { view = this@CategoryDetailActivity }
 
     override fun getLayoutId() = R.layout.activity_category_detail
+
+    /**
+     * 获取加载进度切换事务
+     */
+    override fun <VT> getMultipleStatusViewTransformer(): ObservableTransformer<VT, VT> {
+        return MultipleStatusViewTransformer(multipleStatusView)
+    }
 
     /**
      * 初始化View
@@ -91,7 +91,7 @@ class CategoryDetailActivity : MvpActivity<CategoryDetailPresenter>() {
         toolbar.setNavigationOnClickListener { finish() }
         categoryDetailAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as HomeBean.Issue.Item
-            goToVideoPlayer(view, item)
+            VideoDetailActivity.startActivity(this@CategoryDetailActivity, view, item)
         }
     }
 
@@ -103,24 +103,4 @@ class CategoryDetailActivity : MvpActivity<CategoryDetailPresenter>() {
         categoryDetailAdapter.setNewData(issue.itemList)
     }
 
-    /**
-     * 跳转到视频详情页面播放
-     *
-     * @param activity
-     * @param view
-     */
-    private fun goToVideoPlayer(view: View, itemData: HomeBean.Issue.Item) {
-        val intent = Intent(this, VideoDetailActivity::class.java)
-        intent.putExtra(VideoDetailActivity.BUNDLE_VIDEO_DATA, itemData)
-        intent.putExtra(VideoDetailActivity.Companion.TRANSITION, true)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            val pair = Pair<View, String>(view, VideoDetailActivity.IMG_TRANSITION)
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this, pair)
-            ActivityCompat.startActivity(this, intent, activityOptions.toBundle())
-        } else {
-            startActivity(intent)
-            overridePendingTransition(R.anim.anim_in, R.anim.anim_out)
-        }
-    }
 }

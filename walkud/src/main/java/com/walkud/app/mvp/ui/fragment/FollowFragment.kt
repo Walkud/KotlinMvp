@@ -1,10 +1,6 @@
 package com.walkud.app.mvp.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -71,7 +67,7 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
         super.addListener()
         followAdapter.onItemClick = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
-            goToVideoPlayer(view, itemData)
+            VideoDetailActivity.startActivity(activity!!,view,itemData)
         }
 
         //异常布局，点击重新加载
@@ -94,27 +90,6 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
     fun updateListUi(issue: HomeBean.Issue) {
         loadingMore = false
         followAdapter.setNewData(issue.itemList)
-    }
-
-    /**
-     * 跳转到视频详情页面播放
-     *
-     * @param activity
-     * @param view
-     */
-    private fun goToVideoPlayer(view: View, itemData: HomeBean.Issue.Item) {
-        val intent = Intent(activity, VideoDetailActivity::class.java)
-        intent.putExtra(VideoDetailActivity.BUNDLE_VIDEO_DATA, itemData)
-        intent.putExtra(VideoDetailActivity.TRANSITION, true)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            val pair = Pair<View, String>(view, VideoDetailActivity.IMG_TRANSITION)
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity!!, pair)
-            ActivityCompat.startActivity(activity!!, intent, activityOptions.toBundle())
-        } else {
-            startActivity(intent)
-            activity!!.overridePendingTransition(R.anim.anim_in, R.anim.anim_out)
-        }
     }
 
 }

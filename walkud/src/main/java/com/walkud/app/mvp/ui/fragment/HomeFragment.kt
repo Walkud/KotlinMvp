@@ -3,9 +3,7 @@ package com.walkud.app.mvp.ui.fragment
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.hazz.kotlinmvp.glide.GlideApp
 import com.walkud.app.R
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.mvp.base.MvpFragment
 import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.mvp.presenter.HomePresenter
@@ -44,12 +43,8 @@ class HomeFragment : MvpFragment<HomePresenter>() {
     private var loadingMore = false//加载更多标记
 
     companion object {
-        fun getInstance(title: String): HomeFragment {
-            val fragment = HomeFragment()
-            val bundle = Bundle()
-            fragment.arguments = bundle
-            fragment.mTitle = title
-            return fragment
+        fun getInstance(title: String) = HomeFragment().apply {
+            arguments = Bundle().apply { putString(ExtraKey.COMMON_TITLE, title) }
         }
     }
 
@@ -158,7 +153,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
         //Item点击事件
         homeAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
-            goToVideoPlayer(view, itemData)
+            VideoDetailActivity.startActivity(activity!!, view, itemData)
         }
 
         //异常布局，点击重新加载
@@ -208,7 +203,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
                         .into(banner.getItemImageView(position))
 
                 itemView.setOnClickListener {
-                    goToVideoPlayer(it, data[position])
+                    VideoDetailActivity.startActivity(activity!!, it, data[position])
                 }
             }
         }
@@ -230,26 +225,4 @@ class HomeFragment : MvpFragment<HomePresenter>() {
     fun getColor(colorId: Int): Int {
         return resources.getColor(colorId)
     }
-
-    /**
-     * 跳转到视频详情页面播放
-     *
-     * @param view
-     */
-    private fun goToVideoPlayer(view: View, itemData: HomeBean.Issue.Item) {
-        val intent = Intent(activity, VideoDetailActivity::class.java)
-        intent.putExtra(VideoDetailActivity.BUNDLE_VIDEO_DATA, itemData)
-        intent.putExtra(VideoDetailActivity.TRANSITION, true)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            val pair = Pair(view, VideoDetailActivity.IMG_TRANSITION)
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity!!, pair)
-            ActivityCompat.startActivity(activity!!, intent, activityOptions.toBundle())
-        } else {
-            activity!!.startActivity(intent)
-            activity!!.overridePendingTransition(R.anim.anim_in, R.anim.anim_out)
-        }
-    }
-
-
 }

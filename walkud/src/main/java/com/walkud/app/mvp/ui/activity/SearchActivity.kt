@@ -1,13 +1,9 @@
 package com.walkud.app.mvp.ui.activity
 
 import android.annotation.TargetApi
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.transition.Fade
@@ -200,7 +196,7 @@ class SearchActivity : MvpActivity<SearchPresenter>() {
 
         listAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as HomeBean.Issue.Item
-            goToVideoPlayer(view, item)
+            VideoDetailActivity.startActivity(this@SearchActivity,view,item)
         }
     }
 
@@ -278,24 +274,4 @@ class SearchActivity : MvpActivity<SearchPresenter>() {
         }
     }
 
-    /**
-     * 跳转到视频详情页面播放
-     *
-     * @param activity
-     * @param view
-     */
-    private fun goToVideoPlayer(view: View, itemData: HomeBean.Issue.Item) {
-        val intent = Intent(this, VideoDetailActivity::class.java)
-        intent.putExtra(VideoDetailActivity.BUNDLE_VIDEO_DATA, itemData)
-        intent.putExtra(VideoDetailActivity.Companion.TRANSITION, true)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            val pair = Pair<View, String>(view, VideoDetailActivity.IMG_TRANSITION)
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this, pair)
-            ActivityCompat.startActivity(this, intent, activityOptions.toBundle())
-        } else {
-            startActivity(intent)
-            overridePendingTransition(R.anim.anim_in, R.anim.anim_out)
-        }
-    }
 }

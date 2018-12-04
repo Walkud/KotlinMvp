@@ -3,6 +3,7 @@ package com.walkud.app.mvp.ui.fragment
 import android.os.Bundle
 import android.view.View
 import com.walkud.app.R
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.mvp.base.BaseFragmentAdapter
 import com.walkud.app.mvp.base.MvcFragment
 import com.walkud.app.utils.StatusBarUtil
@@ -20,12 +21,8 @@ class DiscoveryFragment : MvcFragment() {
     private val fragments = listOf(FollowFragment.getInstance(), CategoryFragment.getInstance())
 
     companion object {
-        fun getInstance(title: String): DiscoveryFragment {
-            val fragment = DiscoveryFragment()
-            val bundle = Bundle()
-            bundle.putString("title", title)
-            fragment.arguments = bundle
-            return fragment
+        fun getInstance(title: String) = DiscoveryFragment().apply {
+            arguments = Bundle().apply { putString(ExtraKey.COMMON_TITLE, title) }
         }
     }
 

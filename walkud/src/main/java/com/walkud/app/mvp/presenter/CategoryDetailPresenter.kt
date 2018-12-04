@@ -1,6 +1,7 @@
 package com.walkud.app.mvp.presenter
 
 import com.trello.rxlifecycle2.android.ActivityEvent
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.common.exception.ExceptionHandle
 import com.walkud.app.mvp.base.BasePresenter
 import com.walkud.app.mvp.model.MainModel
@@ -25,14 +26,14 @@ class CategoryDetailPresenter : BasePresenter<CategoryDetailActivity, MainModel>
      * 初始化
      */
     fun init() {
-        if (!view.intent.hasExtra(CategoryDetailActivity.BUNDLE_CATEGORY_DATA)) {
+        if (!view.intent.hasExtra(ExtraKey.CATEGORY_DATA)) {
             //判断参数
             view.showToast("参数错误")
             view.backward()
             return
         }
 
-        categoryData = view.intent.getSerializableExtra(CategoryDetailActivity.BUNDLE_CATEGORY_DATA) as CategoryBean
+        categoryData = view.intent.getSerializableExtra(ExtraKey.CATEGORY_DATA) as CategoryBean
         view.updateTopUi(categoryData)
         queryCategoryDetailList()
     }
@@ -43,16 +44,13 @@ class CategoryDetailPresenter : BasePresenter<CategoryDetailActivity, MainModel>
     fun queryCategoryDetailList() {
         model.getCategoryDetailList(categoryData.id)
                 .compose(NetTransformer())
+                .compose(view.getMultipleStatusViewTransformer())
                 .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(object : RxSubscribe<HomeBean.Issue>() {
                     override fun call(result: HomeBean.Issue) {
                         issue = result
                         nextPageUrl = result.nextPageUrl
                         view.updateListUi(issue!!)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        super.onError(e)
                     }
                 })
     }

@@ -1,9 +1,14 @@
 package com.walkud.app.mvp.ui.activity
 
 import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.Transition
@@ -19,6 +24,7 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.walkud.app.R
+import com.walkud.app.common.ExtraKey
 import com.walkud.app.mvp.base.MvpActivity
 import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.mvp.presenter.VideoDetailPresenter
@@ -37,12 +43,6 @@ import java.util.*
  */
 class VideoDetailActivity : MvpActivity<VideoDetailPresenter>() {
 
-    companion object {
-        const val BUNDLE_VIDEO_DATA = "video_data"
-        const val IMG_TRANSITION = "IMG_TRANSITION"
-        const val TRANSITION = "TRANSITION"
-    }
-
     private var transition: Transition? = null
     private var orientationUtils: OrientationUtils? = null
     private val videoDetailAdapter: VideoDetailAdapter = VideoDetailAdapter()
@@ -50,6 +50,32 @@ class VideoDetailActivity : MvpActivity<VideoDetailPresenter>() {
     private var isTransition: Boolean = false//是否执行进入动画
     private var isPlay: Boolean = false//是否为播放中
     private var isPause: Boolean = false//是否为暂停中
+
+
+    companion object {
+
+        /**
+         * 跳转到视频详情页面播放
+         *
+         * @param activity
+         * @param view
+         * @param itemData
+         */
+        fun startActivity(activity: Activity, view: View, itemData: HomeBean.Issue.Item) {
+            val intent = Intent(activity, VideoDetailActivity::class.java)
+            intent.putExtra(ExtraKey.VIDEO_DATA, itemData)
+            intent.putExtra(ExtraKey.TRANSITION, true)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                val pair = Pair(view, ExtraKey.IMG_TRANSITION)
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity, pair)
+                ActivityCompat.startActivity(activity, intent, activityOptions.toBundle())
+            } else {
+                activity.startActivity(intent)
+                activity.overridePendingTransition(R.anim.anim_in, R.anim.anim_out)
+            }
+        }
+    }
 
     override fun getP() = VideoDetailPresenter().apply { view = this@VideoDetailActivity }
 
@@ -181,7 +207,7 @@ class VideoDetailActivity : MvpActivity<VideoDetailPresenter>() {
         this.isTransition = isTransition
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postponeEnterTransition()
-            ViewCompat.setTransitionName(mVideoView, IMG_TRANSITION)
+            ViewCompat.setTransitionName(mVideoView, ExtraKey.IMG_TRANSITION)
             addTransitionListener()
             startPostponedEnterTransition()
         } else {

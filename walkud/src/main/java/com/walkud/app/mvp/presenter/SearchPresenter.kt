@@ -1,5 +1,6 @@
 package com.walkud.app.mvp.presenter
 
+import com.trello.rxlifecycle2.android.ActivityEvent
 import com.walkud.app.common.exception.ExceptionHandle
 import com.walkud.app.mvp.base.BasePresenter
 import com.walkud.app.mvp.model.MainModel
@@ -23,7 +24,9 @@ class SearchPresenter : BasePresenter<SearchActivity, MainModel>() {
      * 请求热门关键词的数据
      */
     fun queryHotWordData() {
-        model.getHotWordData().compose(NetTransformer())
+        model.getHotWordData()
+                .compose(NetTransformer())
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(object : RxSubscribe<ArrayList<String>>() {
                     override fun call(result: ArrayList<String>) {
                         view.setHotWordData(result)
@@ -46,6 +49,7 @@ class SearchPresenter : BasePresenter<SearchActivity, MainModel>() {
         model.getSearchResult(keyWords!!)
                 .compose(NetTransformer())
                 .compose(ProgressTransformer(view))
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(object : RxSubscribe<HomeBean.Issue>() {
                     override fun call(result: HomeBean.Issue) {
                         issue = result
@@ -70,6 +74,7 @@ class SearchPresenter : BasePresenter<SearchActivity, MainModel>() {
     fun loadMoreData() {
         model.getSearchIssueData(nextPageUrl!!)
                 .compose(NetTransformer())
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(object : RxSubscribe<HomeBean.Issue>() {
                     override fun call(result: HomeBean.Issue) {
                         issue!!.itemList.addAll(result.itemList)
