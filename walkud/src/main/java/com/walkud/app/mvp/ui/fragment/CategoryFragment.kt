@@ -68,6 +68,11 @@ class CategoryFragment : MvpFragment<CategoryPresenter>() {
             intent.putExtra(ExtraKey.CATEGORY_DATA, data)
             startActivity(intent)
         }
+
+        //异常布局，点击重新加载
+        multipleStatusView.setOnClickListener {
+            presenter.queryCategoryData()
+        }
     }
 
     /**

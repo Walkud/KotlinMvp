@@ -69,7 +69,8 @@ class VideoDetailPresenter : BasePresenter<VideoDetailActivity, MainModel>() {
                     val playUrl = i.url
                     view.setVideo(playUrl)
 
-                    if (!netType) {
+                    //移动流量提示
+                    if (!netType && NetworkUtil.isNetworkAvailable(view.applicationContext)) {
                         //Todo 待完善弹框提示
                         view.showToast("本次消耗${view.dataFormat(i.urlList[0].size)}流量")
                     }

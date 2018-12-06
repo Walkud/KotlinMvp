@@ -20,6 +20,7 @@ class HotPresenter : BasePresenter<HotFragment, MainModel>() {
     fun queryRankTabData() {
         model.getRankTabData()
                 .compose(NetTransformer())
+                .compose(view.getMultipleStatusViewTransformer())
                 .compose(bindFragmentUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(object : RxSubscribe<TabInfoBean>() {
                     override fun call(result: TabInfoBean) {

@@ -40,6 +40,9 @@ class HotFragment : MvpFragment<HotPresenter>() {
         return MultipleStatusViewTransformer(multipleStatusView)
     }
 
+    /**
+     * 初始化View
+     */
     override fun initView(savedInstanceState: Bundle?, rootView: View) {
 
         tv_header_title.text = arguments?.getString("title")
@@ -49,6 +52,17 @@ class HotFragment : MvpFragment<HotPresenter>() {
         activity?.let { StatusBarUtil.setPaddingSmart(it, toolbar) }
 
         presenter.queryRankTabData()
+    }
+
+    /**
+     * 添加点击事件
+     */
+    override fun addListener() {
+        super.addListener()
+        //异常布局，点击重新加载
+        multipleStatusView.setOnClickListener {
+            presenter.queryRankTabData()
+        }
     }
 
     /**

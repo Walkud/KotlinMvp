@@ -67,11 +67,11 @@ class FollowFragment : MvpFragment<FollowPresenter>() {
         super.addListener()
         followAdapter.onItemClick = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
-            VideoDetailActivity.startActivity(activity!!,view,itemData)
+            VideoDetailActivity.startActivity(activity!!, view, itemData)
         }
 
         //异常布局，点击重新加载
-        multipleStatusView.setOnRetryClickListener {
+        multipleStatusView.setOnClickListener {
             presenter.queryFollowList()
         }
     }

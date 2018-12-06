@@ -93,6 +93,11 @@ class CategoryDetailActivity : MvpActivity<CategoryDetailPresenter>() {
             val item = adapter.getItem(position) as HomeBean.Issue.Item
             VideoDetailActivity.startActivity(this@CategoryDetailActivity, view, item)
         }
+
+        //异常布局，点击重新加载
+        multipleStatusView.setOnClickListener {
+            presenter.queryCategoryDetailList()
+        }
     }
 
     /**

@@ -74,7 +74,7 @@ class SearchActivity : MvpActivity<SearchPresenter>() {
     /**
      * 执行动画
      */
-    fun executeAnimation() {
+    private fun executeAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setUpEnterAnimation() // 入场动画
             setUpExitAnimation() // 退场动画
@@ -198,6 +198,7 @@ class SearchActivity : MvpActivity<SearchPresenter>() {
             val item = adapter.getItem(position) as HomeBean.Issue.Item
             VideoDetailActivity.startActivity(this@SearchActivity,view,item)
         }
+
     }
 
     /**

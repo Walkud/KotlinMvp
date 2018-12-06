@@ -36,8 +36,6 @@ class HomeFragment : MvpFragment<HomePresenter>() {
 
     private lateinit var bgaBanner: BGABanner//BannerView
 
-    private var mTitle: String? = null
-
     private var homeAdapter = HomeAdapter()
 
     private var loadingMore = false//加载更多标记
@@ -157,7 +155,7 @@ class HomeFragment : MvpFragment<HomePresenter>() {
         }
 
         //异常布局，点击重新加载
-        multipleStatusView.setOnRetryClickListener {
+        multipleStatusView.setOnClickListener {
             presenter.refreshListData(getMultipleStatusViewTransformer())
         }
     }

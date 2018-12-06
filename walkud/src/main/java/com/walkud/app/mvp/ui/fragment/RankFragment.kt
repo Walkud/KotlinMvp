@@ -13,7 +13,7 @@ import com.walkud.app.mvp.ui.activity.VideoDetailActivity
 import com.walkud.app.mvp.ui.adapter.CategoryDetailAdapter
 import com.walkud.app.rx.transformer.MultipleStatusViewTransformer
 import io.reactivex.ObservableTransformer
-import kotlinx.android.synthetic.main.fragment_category.*
+import kotlinx.android.synthetic.main.fragment_rank.*
 
 /**
  * 热门-排行UI
@@ -60,6 +60,11 @@ class RankFragment : MvpFragment<RankPresenter>() {
         categoryDetailAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val itemData = adapter.getItem(position) as HomeBean.Issue.Item
             VideoDetailActivity.startActivity(activity!!, view, itemData)
+        }
+
+        //异常布局，点击重新加载
+        multipleStatusView.setOnClickListener {
+            presenter.queryRankList()
         }
     }
 

@@ -19,7 +19,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.hazz.kotlinmvp.glide.GlideApp
 import com.orhanobut.logger.Logger
-import com.shuyu.gsyvideoplayer.listener.LockClickListener
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
@@ -170,13 +169,10 @@ class VideoDetailActivity : MvpActivity<VideoDetailPresenter>() {
             mVideoView.startWindowFullscreen(this, true, true)
         }
         //锁屏事件
-        mVideoView.setLockClickListener(object : LockClickListener {
-            override fun onClick(view: View?, lock: Boolean) {
-                //配合下方的onConfigurationChanged
-                orientationUtils?.isEnable = !lock
-            }
-
-        })
+        mVideoView.setLockClickListener { view, lock ->
+            //配合下方的onConfigurationChanged
+            orientationUtils?.isEnable = !lock
+        }
     }
 
     /**
