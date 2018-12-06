@@ -44,6 +44,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".mvp.ui.activity.CategoryDetailActivity" />
         <activity android:name=".mvp.ui.activity.WatchHistoryActivity" />
+        <activity android:name=".mvp.ui.activity.AboutActivity"/>
 
     </application>
 

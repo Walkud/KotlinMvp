@@ -294,7 +294,7 @@ class VideoDetailActivity : MvpActivity<VideoDetailPresenter>() {
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) run {
             super.onBackPressed()
         } else {
-            finish()
+            backward()
             overridePendingTransition(R.anim.anim_out, R.anim.anim_in)
         }
     }

@@ -8,6 +8,7 @@ import com.walkud.app.R
 import com.walkud.app.common.ExtraKey
 import com.walkud.app.mvp.base.MvpFragment
 import com.walkud.app.mvp.presenter.MinePresenter
+import com.walkud.app.mvp.ui.activity.AboutActivity
 import com.walkud.app.mvp.ui.activity.WatchHistoryActivity
 import com.walkud.app.mvp.ui.adapter.MineAdapter
 import com.walkud.app.utils.StatusBarUtil
@@ -75,7 +76,7 @@ class MineFragment : MvpFragment<MinePresenter>() {
         }
 
         iv_about.setOnClickListener {
-            showToast("关于我们")
+            forward(AboutActivity::class.java)
         }
 
         tv_view_homepage.setOnClickListener {

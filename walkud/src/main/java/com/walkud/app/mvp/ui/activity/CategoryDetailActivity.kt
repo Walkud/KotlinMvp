@@ -88,7 +88,7 @@ class CategoryDetailActivity : MvpActivity<CategoryDetailPresenter>() {
      */
     override fun addListener() {
         super.addListener()
-        toolbar.setNavigationOnClickListener { finish() }
+        toolbar.setNavigationOnClickListener { backward() }
         categoryDetailAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as HomeBean.Issue.Item
             VideoDetailActivity.startActivity(this@CategoryDetailActivity, view, item)

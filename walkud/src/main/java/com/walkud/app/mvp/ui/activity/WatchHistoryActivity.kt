@@ -55,7 +55,7 @@ class WatchHistoryActivity : MvpActivity<WatchHistoryPresenter>() {
     override fun addListener() {
         super.addListener()
         //返回
-        toolbar.setNavigationOnClickListener { finish() }
+        toolbar.setNavigationOnClickListener { backward() }
 
         //记录Item点击事件
         watchHistoryAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->

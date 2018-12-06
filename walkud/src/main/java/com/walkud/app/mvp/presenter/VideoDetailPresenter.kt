@@ -33,7 +33,7 @@ class VideoDetailPresenter : BasePresenter<VideoDetailActivity, MainModel>() {
 
         if (itemData.data == null) {
             view.showToast("数据错误")
-            view.finish()
+            view.backward()
             return
         }
 
