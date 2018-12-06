@@ -56,8 +56,7 @@ class SplashActivity : MvcActivity() {
 
         })
 
-        MPermissions.requestPermissions(this, PERMISSION_CODE,
-                Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        recheckPermissions()
     }
 
     /**
@@ -74,5 +73,14 @@ class SplashActivity : MvcActivity() {
     @PermissionDenied(PERMISSION_CODE)
     fun requestWriteExternalStorageForUploadFailed() {
         showPermissionDialog(resources.getString(R.string.p_read_external_storage))
+    }
+
+    /**
+     * 重新检查权限
+     */
+    override fun recheckPermissions() {
+        super.recheckPermissions()
+        MPermissions.requestPermissions(this, PERMISSION_CODE,
+                Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 }

@@ -12,6 +12,7 @@ import com.walkud.app.R
 import com.walkud.app.common.extensions.closeKeyBoard
 import com.walkud.app.rx.transformer.EmptyTransformer
 import com.walkud.app.rx.transformer.ProgressTransformer
+import com.zhy.m.permission.MPermissions
 import io.reactivex.ObservableTransformer
 
 /**
@@ -20,6 +21,8 @@ import io.reactivex.ObservableTransformer
  */
 abstract class MvcActivity : RxAppCompatActivity() {
 
+    var permissionFlag = false//权限设置跳转记录标记
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
@@ -27,6 +30,14 @@ abstract class MvcActivity : RxAppCompatActivity() {
         initView(savedInstanceState)
         addListener()
         processLogic(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (permissionFlag) {//是否需要重新检查权限标记
+            permissionFlag = false
+            recheckPermissions()
+        }
     }
 
     /**
@@ -112,20 +123,37 @@ abstract class MvcActivity : RxAppCompatActivity() {
     }
 
     /**
+     * MPermissions 请求权限回调处理
+     */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    /**
      * 显示权限申请说明
      * @param permission 说明文本
      */
     fun showPermissionDialog(permission: String) {
         AlertDialog.Builder(this)
+                .setCancelable(false)
                 .setMessage(permission)
                 .setTitle(getString(R.string.string_help_text, permission))
-                .setPositiveButton("设置") { dialog, which ->
+                .setPositiveButton("设置") { _, _ ->
+                    permissionFlag = true
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     intent.data = Uri.parse("package:$packageName")
                     forward(intent)
                 }
                 .create()
                 .show()
+    }
+
+    /**
+     * 重新检查权限，子类复写
+     * 当跳转至设置页面后，回到当前页面时会调用此方法，子类可重新检查权限是否设置
+     */
+    open fun recheckPermissions() {
     }
 
     /**
