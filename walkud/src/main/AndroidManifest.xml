@@ -42,7 +42,8 @@
         <activity
             android:name=".mvp.ui.activity.VideoDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-        <activity android:name=".mvp.ui.activity.CategoryDetailActivity"/>
+        <activity android:name=".mvp.ui.activity.CategoryDetailActivity" />
+        <activity android:name=".mvp.ui.activity.WatchHistoryActivity" />
 
     </application>
 

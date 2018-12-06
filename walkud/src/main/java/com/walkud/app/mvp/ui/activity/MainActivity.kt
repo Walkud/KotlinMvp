@@ -13,6 +13,7 @@ import com.walkud.app.mvp.presenter.MainPresenter
 import com.walkud.app.mvp.ui.fragment.DiscoveryFragment
 import com.walkud.app.mvp.ui.fragment.HomeFragment
 import com.walkud.app.mvp.ui.fragment.HotFragment
+import com.walkud.app.mvp.ui.fragment.MineFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -33,8 +34,8 @@ class MainActivity : MvpActivity<MainPresenter>() {
     private var mHomeFragment: HomeFragment? = null
     private var mDiscoveryFragment: DiscoveryFragment? = null
     private var mHotFragment: HotFragment? = null
-    //    private var mMineFragment: MineFragment? = null
-//
+    private var mMineFragment: MineFragment? = null
+    //
     private var mExitTime: Long = 0
     //默认为0
     private var mIndex = 0
@@ -107,13 +108,13 @@ class MainActivity : MvpActivity<MainPresenter>() {
                 mHotFragment = it
                 transaction.add(R.id.fl_container, it, "hot")
             }
-//            3 //我的
-//            -> mMineFragment?.let {
-//                transaction.show(it)
-//            } ?: MineFragment.getInstance(mTitles[position]).let {
-//                mMineFragment = it
-//                transaction.add(R.id.fl_container, it, "mine") }
-
+            3 //我的
+            -> mMineFragment?.let {
+                transaction.show(it)
+            } ?: MineFragment.getInstance(mTitles[position]).let {
+                mMineFragment = it
+                transaction.add(R.id.fl_container, it, "mine")
+            }
             else -> {
 
             }
@@ -133,7 +134,7 @@ class MainActivity : MvpActivity<MainPresenter>() {
         mHomeFragment?.let { transaction.hide(it) }
         mDiscoveryFragment?.let { transaction.hide(it) }
         mHotFragment?.let { transaction.hide(it) }
-//        mMineFragment?.let { transaction.hide(it) }
+        mMineFragment?.let { transaction.hide(it) }
     }
 
 

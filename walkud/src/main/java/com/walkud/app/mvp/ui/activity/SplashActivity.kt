@@ -5,10 +5,10 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import com.walkud.app.App
 import com.walkud.app.R
 import com.walkud.app.mvp.base.MvcActivity
 import com.walkud.app.utils.AppUtils
+import com.walkud.app.utils.ContextUtil
 import com.zhy.m.permission.MPermissions
 import com.zhy.m.permission.PermissionDenied
 import com.zhy.m.permission.PermissionGrant
@@ -28,8 +28,8 @@ class SplashActivity : MvcActivity() {
     private var alphaAnimation: AlphaAnimation? = null
 
     init {
-        textTypeface = Typeface.createFromAsset(App.instance.assets, "fonts/Lobster-1.4.otf")
-        descTypeFace = Typeface.createFromAsset(App.instance.assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
+        textTypeface = Typeface.createFromAsset(ContextUtil.getContext().assets, "fonts/Lobster-1.4.otf")
+        descTypeFace = Typeface.createFromAsset(ContextUtil.getContext().assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
     }
 
     override fun getLayoutId() = R.layout.activity_splash

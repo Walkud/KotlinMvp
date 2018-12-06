@@ -3,7 +3,6 @@ package com.walkud.app.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import com.walkud.app.App
 import java.io.*
 import kotlin.reflect.KProperty
 
@@ -18,7 +17,7 @@ class Preference<T>(val name: String, private val default: T) {
         private const val file_name = "kotlin_mvp_file"
 
         private val prefs: SharedPreferences by lazy {
-            App.instance.getSharedPreferences(file_name, Context.MODE_PRIVATE)
+            ContextUtil.getContext().getSharedPreferences(file_name, Context.MODE_PRIVATE)
         }
 
         /**

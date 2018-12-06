@@ -21,8 +21,8 @@ class MultipleStatusViewTransformer<T>(var multipleStatusView: MultipleStatusVie
                 }
                 .doOnError {
                     onError(it)
-                }.doOnComplete {
-                    onComplete()
+                }.doOnNext {
+                    doOnNext()
                 }
 
     }
@@ -30,7 +30,7 @@ class MultipleStatusViewTransformer<T>(var multipleStatusView: MultipleStatusVie
     /**
      * 加载错误,显示异常布局
      */
-    fun onError(e: Throwable) {
+    private fun onError(e: Throwable) {
         ExceptionHandle.handleException(e)
         if (ExceptionHandle.errorCode == ErrorStatus.NETWORK_ERROR) {
             multipleStatusView?.showNoNetwork()
@@ -41,9 +41,9 @@ class MultipleStatusViewTransformer<T>(var multipleStatusView: MultipleStatusVie
     }
 
     /**
-     * 加载完成，显示内容布局
+     * 加载成功，显示内容布局
      */
-    fun onComplete() {
+    private fun doOnNext() {
         multipleStatusView?.showContent()
         multipleStatusView = null
     }

@@ -18,18 +18,17 @@ class WatchHistoryUtils {
         /**
          * 保存在手机里面的文件名
          */
-        private val FILE_NAME = "kotlin_mvp_file"
+        private const val FILE_NAME = "kotlin_mvp_file"
 
         /**
          * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
          *
-         * @param context
          * @param key
          * @param object
          */
-        fun put(context: Context, key: String, `object`: Any) {
+        fun put(key: String, `object`: Any) {
 
-            val sp = context.getSharedPreferences(FILE_NAME,
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
 
@@ -48,13 +47,12 @@ class WatchHistoryUtils {
         /**
          * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
          *
-         * @param context
          * @param key
          * @param defaultObject
          * @return
          */
-        operator fun get(context: Context, key: String, defaultObject: Any): Any? {
-            val sp = context.getSharedPreferences(FILE_NAME,
+        operator fun get(key: String, defaultObject: Any): Any? {
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
 
             return when (defaultObject) {
@@ -71,11 +69,10 @@ class WatchHistoryUtils {
         /**
          * 移除某个key值已经对应的值
          *
-         * @param context
          * @param key
          */
-        fun remove(context: Context, key: String) {
-            val sp = context.getSharedPreferences(FILE_NAME,
+        fun remove(key: String) {
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
             editor.remove(key)
@@ -85,10 +82,9 @@ class WatchHistoryUtils {
         /**
          * 清除所有数据
          *
-         * @param context
          */
-        fun clear(context: Context) {
-            val sp = context.getSharedPreferences(FILE_NAME,
+        fun clear() {
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
             editor.clear()
@@ -98,12 +94,11 @@ class WatchHistoryUtils {
         /**
          * 查询某个key是否已经存在
          *
-         * @param context
          * @param key
          * @return
          */
-        fun contains(context: Context, key: String): Boolean {
-            val sp = context.getSharedPreferences(FILE_NAME,
+        fun contains(key: String): Boolean {
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
             return sp.contains(key)
         }
@@ -111,11 +106,10 @@ class WatchHistoryUtils {
         /**
          * 返回所有的键值对
          *
-         * @param context
          * @return
          */
-        fun getAll(context: Context): Map<String, *> {
-            val sp = context.getSharedPreferences(FILE_NAME,
+        fun getAll(): Map<String, *> {
+            val sp = ContextUtil.getContext().getSharedPreferences(FILE_NAME,
                     Context.MODE_PRIVATE)
             return sp.all
         }
@@ -170,13 +164,12 @@ class WatchHistoryUtils {
         /**
          * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
          *
-         * @param context
          * @param key
          * @param object
          */
-        fun put(fileName: String, context: Context, key: String, `object`: Any) {
+        fun put(fileName: String, key: String, `object`: Any) {
 
-            val sp = context.getSharedPreferences(fileName,
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
 
@@ -195,13 +188,12 @@ class WatchHistoryUtils {
         /**
          * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
          *
-         * @param context
          * @param key
          * @param defaultObject
          * @return
          */
-        operator fun get(fileName: String, context: Context, key: String, defaultObject: Any): Any? {
-            val sp = context.getSharedPreferences(fileName,
+        operator fun get(fileName: String, key: String, defaultObject: Any): Any? {
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
 
             return when (defaultObject) {
@@ -218,11 +210,11 @@ class WatchHistoryUtils {
         /**
          * 移除某个key值已经对应的值
          *
-         * @param context
+         * @param fileName
          * @param key
          */
-        fun remove(fileName: String, context: Context, key: String) {
-            val sp = context.getSharedPreferences(fileName,
+        fun remove(fileName: String, key: String) {
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
             editor.remove(key)
@@ -232,10 +224,10 @@ class WatchHistoryUtils {
         /**
          * 清除所有数据
          *
-         * @param context
+         * @param fileName
          */
-        fun clear(fileName: String, context: Context) {
-            val sp = context.getSharedPreferences(fileName,
+        fun clear(fileName: String) {
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             val editor = sp.edit()
             editor.clear()
@@ -245,12 +237,12 @@ class WatchHistoryUtils {
         /**
          * 查询某个key是否已经存在
          *
-         * @param context
+         * @param fileName
          * @param key
          * @return
          */
-        fun contains(fileName: String, context: Context, key: String): Boolean {
-            val sp = context.getSharedPreferences(fileName,
+        fun contains(fileName: String, key: String): Boolean {
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             return sp.contains(key)
         }
@@ -258,19 +250,19 @@ class WatchHistoryUtils {
         /**
          * 返回所有的键值对
          *
-         * @param context
+         * @param fileName
          * @return
          */
-        fun getAll(fileName: String, context: Context): Map<String, *> {
-            val sp = context.getSharedPreferences(fileName,
+        fun getAll(fileName: String): Map<String, *> {
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             return sp.all
         }
 
 
-        fun putObject(fileName: String,context: Context, `object`: Any?,
+        fun putObject(fileName: String, `object`: Any?,
                       key: String): Boolean {
-            val sp = context.getSharedPreferences(fileName,
+            val sp = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             if (`object` == null) {
                 val editor = sp.edit().remove(key)
@@ -305,12 +297,12 @@ class WatchHistoryUtils {
         /**
          * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
          *
-         * @param context
+         * @param fileName
          * @param key
          * @return
          */
-        fun getObject(fileName: String,context: Context, key: String): Any? {
-            val sharePre = context.getSharedPreferences(fileName,
+        fun getObject(fileName: String, key: String): Any? {
+            val sharePre = ContextUtil.getContext().getSharedPreferences(fileName,
                     Context.MODE_PRIVATE)
             try {
                 val wordBase64 = sharePre.getString(key, "")

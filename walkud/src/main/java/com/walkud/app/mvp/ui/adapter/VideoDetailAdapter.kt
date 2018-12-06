@@ -6,10 +6,10 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hazz.kotlinmvp.glide.GlideApp
-import com.walkud.app.App
 import com.walkud.app.R
 import com.walkud.app.common.extensions.durationFormat
 import com.walkud.app.mvp.model.bean.HomeBean
+import com.walkud.app.utils.ContextUtil
 
 /**
  * 视频详情列表Adatper
@@ -23,7 +23,7 @@ class VideoDetailAdapter(data: MutableList<HomeBean.Issue.Item> = ArrayList()) :
         addItemType(HomeBean.Issue.Item.ITEM_TYPE_CONTENT, R.layout.item_video_detail_info)
         addItemType(HomeBean.Issue.Item.ITEM_TYPE_TEXT_CARD, R.layout.item_video_text_card)
         addItemType(HomeBean.Issue.Item.ITEM_TYPE_VIDEO_SMALL_CARD, R.layout.item_video_small_card)
-        textTypeface = Typeface.createFromAsset(App.instance.assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
+        textTypeface = Typeface.createFromAsset(ContextUtil.getContext().assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
     }
 
     override fun convert(helper: BaseViewHolder, item: HomeBean.Issue.Item) {

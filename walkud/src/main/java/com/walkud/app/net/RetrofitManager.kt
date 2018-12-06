@@ -1,9 +1,9 @@
 package com.walkud.app.net
 
 import com.hazz.kotlinmvp.api.UrlConstant
-import com.walkud.app.App
 import com.walkud.app.api.ApiService
 import com.walkud.app.utils.AppUtils
+import com.walkud.app.utils.ContextUtil
 import com.walkud.app.utils.NetworkUtil
 import com.walkud.app.utils.Preference
 import okhttp3.*
@@ -65,13 +65,13 @@ object RetrofitManager {
     private fun addCacheInterceptor(): Interceptor {
         return Interceptor { chain ->
             var request = chain.request()
-            if (!NetworkUtil.isNetworkAvailable(App.instance)) {
+            if (!NetworkUtil.isNetworkAvailable(ContextUtil.getContext())) {
                 request = request.newBuilder()
                         .cacheControl(CacheControl.FORCE_CACHE)
                         .build()
             }
             val response = chain.proceed(request)
-            if (NetworkUtil.isNetworkAvailable(App.instance)) {
+            if (NetworkUtil.isNetworkAvailable(ContextUtil.getContext())) {
                 val maxAge = 0
                 // 有网络时 设置缓存超时时间0个小时 ,意思就是不读取缓存数据,只对get有用,post没有缓冲
                 response.newBuilder()
@@ -108,7 +108,7 @@ object RetrofitManager {
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         //设置 请求的缓存的大小跟位置
-        val cacheFile = File(App.instance.cacheDir, "cache")
+        val cacheFile = File(ContextUtil.getContext().cacheDir, "cache")
         val cache = Cache(cacheFile, 1024 * 1024 * 50) //50Mb 缓存的大小
 
         return OkHttpClient.Builder()

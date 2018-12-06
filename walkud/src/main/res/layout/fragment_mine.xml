@@ -13,38 +13,33 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/color_title_bg">
 
-    <RelativeLayout
-        android:id="@+id/rel_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/rel_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_about"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:src="@mipmap/ic_about" />
+            <ImageView
+                android:id="@+id/iv_about"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:src="@mipmap/ic_about" />
 
-    </RelativeLayout>
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-
-    <LinearLayout
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+    <com.walkud.app.view.CircleImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center">
-
-        <com.hazz.kotlinmvp.view.CircleImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@mipmap/img_avatar"
-            app:borderColor="@color/color_gray"
-            app:borderWidth="2dp"
-            app:type="circle" />
-    </LinearLayout>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/img_avatar"
+        app:borderColor="@color/color_gray"
+        app:borderWidth="2dp"
+        app:type="circle" />
 
     <TextView
         android:id="@+id/tv_nickname"
@@ -60,58 +55,13 @@
         android:id="@+id/tv_view_homepage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:paddingTop="@dimen/padding_common_d"
         android:paddingBottom="@dimen/padding_common_d"
-        android:layout_gravity="center_horizontal"
         android:text="@string/view_homepage"
         android:textColor="@color/color_gray"
         android:textSize="@dimen/textSize_small" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:drawablePadding="7dp"
-                android:drawableStart="@mipmap/ic_action_collection"
-                android:gravity="center"
-                android:text="@string/collection" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:background="@color/color_gray" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
-                android:drawablePadding="7dp"
-                android:drawableStart="@mipmap/ic_action_comment"
-                android:gravity="center"
-                android:text="@string/comment" />
-        </LinearLayout>
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -119,60 +69,61 @@
         android:layout_marginTop="15dp"
         android:background="@color/color_gray" />
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="50dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:id="@+id/collection_layout"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="50dp"
-            android:orientation="vertical">
-
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tv_mine_message"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|center_horizontal"
-                android:text="@string/mine_message"
-                android:textSize="14sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableStart="@mipmap/ic_action_collection"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="@string/collection"
+                android:translationX="5dp" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/color_gray" />
+
+        <FrameLayout
+            android:id="@+id/comment_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tv_mine_attention"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|center_horizontal"
-                android:text="@string/mine_attention"
-                android:textSize="14sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:drawableStart="@mipmap/ic_action_comment"
+                android:drawablePadding="7dp"
+                android:gravity="center"
+                android:text="@string/comment"
+                android:translationX="-5dp" />
+        </FrameLayout>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_mine_cache"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|center_horizontal"
-                android:text="@string/mine_cache"
-                android:textSize="14sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_gray" />
 
-            <TextView
-                android:id="@+id/tv_watch_history"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|center_horizontal"
-                android:text="@string/view_history"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|center_horizontal"
-                android:text="@string/feedback"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
 
 </LinearLayout>

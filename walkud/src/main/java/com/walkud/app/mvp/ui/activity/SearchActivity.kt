@@ -17,7 +17,6 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.flexbox.*
 import com.hazz.kotlinmvp.net.exception.ErrorStatus
-import com.walkud.app.App
 import com.walkud.app.R
 import com.walkud.app.common.extensions.closeKeyBoard
 import com.walkud.app.common.extensions.openKeyBoard
@@ -26,6 +25,7 @@ import com.walkud.app.mvp.model.bean.HomeBean
 import com.walkud.app.mvp.presenter.SearchPresenter
 import com.walkud.app.mvp.ui.adapter.CategoryDetailAdapter
 import com.walkud.app.mvp.ui.adapter.HotKeywordsAdapter
+import com.walkud.app.utils.ContextUtil
 import com.walkud.app.utils.StatusBarUtil
 import com.walkud.app.view.ViewAnimUtils
 import kotlinx.android.synthetic.main.activity_search.*
@@ -46,7 +46,7 @@ class SearchActivity : MvpActivity<SearchPresenter>() {
 
     init {
         //细黑简体字体
-        mTextTypeface = Typeface.createFromAsset(App.instance.assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
+        mTextTypeface = Typeface.createFromAsset(ContextUtil.getContext().assets, "fonts/FZLanTingHeiS-L-GB-Regular.TTF")
     }
 
     override fun initView(savedInstanceState: Bundle?) {

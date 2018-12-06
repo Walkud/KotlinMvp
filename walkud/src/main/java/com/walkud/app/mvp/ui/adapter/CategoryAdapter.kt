@@ -6,9 +6,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hazz.kotlinmvp.glide.GlideApp
-import com.walkud.app.App
 import com.walkud.app.R
 import com.walkud.app.mvp.model.bean.CategoryBean
+import com.walkud.app.utils.ContextUtil
 
 /**
  * 发现-分类Adapter
@@ -16,7 +16,7 @@ import com.walkud.app.mvp.model.bean.CategoryBean
  */
 class CategoryAdapter(layoutResId: Int = R.layout.item_category, data: MutableList<CategoryBean> = ArrayList()) : BaseQuickAdapter<CategoryBean, BaseViewHolder>(layoutResId, data) {
 
-    private var textTypeface: Typeface = Typeface.createFromAsset(App.instance.assets, "fonts/FZLanTingHeiS-DB1-GB-Regular.TTF")
+    private var textTypeface: Typeface = Typeface.createFromAsset(ContextUtil.getContext().assets, "fonts/FZLanTingHeiS-DB1-GB-Regular.TTF")
 
     override fun convert(helper: BaseViewHolder, item: CategoryBean) {
         helper.setText(R.id.tv_category_name, "#${item.name}")

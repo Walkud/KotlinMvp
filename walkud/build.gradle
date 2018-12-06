@@ -133,8 +133,4 @@ dependencies {
         exclude group: 'androidx.appcompat'
     }
 
-//    implementation ('com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35') {
-//        exclude group: 'com.android.support', module: '*'
-//    }
-
 }

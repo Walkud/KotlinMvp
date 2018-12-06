@@ -1,6 +1,5 @@
 package com.walkud.app.mvp.presenter
 
-import com.walkud.app.App
 import com.walkud.app.common.ExtraKey
 import com.walkud.app.common.extensions.dataFormat
 import com.walkud.app.mvp.base.BasePresenter
@@ -56,12 +55,14 @@ class VideoDetailPresenter : BasePresenter<VideoDetailActivity, MainModel>() {
      * 加载视频及相关数据
      */
     fun loadVideoInfo(itemData: HomeBean.Issue.Item) {
+        //缓存当前观看记录
+        model.saveWatchVideoHistory(itemData)
 
         val playInfo = itemData.data!!.playInfo
 
         if (playInfo!!.size > 1) {
             // 当前网络是 Wifi环境下选择高清的视频
-            val netType = NetworkUtil.isWifi(App.instance)
+            val netType = NetworkUtil.isWifi(view.applicationContext)
             val type = if (netType) "high" else "normal"
             for (i in playInfo) {
                 if (i.type == type) {
@@ -76,11 +77,11 @@ class VideoDetailPresenter : BasePresenter<VideoDetailActivity, MainModel>() {
                 }
             }
         } else {
-            view.setVideo(itemData.data!!.playUrl)
+            view.setVideo(itemData.data.playUrl)
         }
 
         //设置背景
-        val backgroundUrl = itemData.data!!.cover.blurred + "/thumbnail/${DisplayManager.getScreenHeight()!! - DisplayManager.dip2px(250f)!!}x${DisplayManager.getScreenWidth()}"
+        val backgroundUrl = itemData.data.cover.blurred + "/thumbnail/${DisplayManager.getScreenHeight()!! - DisplayManager.dip2px(250f)!!}x${DisplayManager.getScreenWidth()}"
         view.updateBackgroundUi(backgroundUrl)
 
         //加载相关数据

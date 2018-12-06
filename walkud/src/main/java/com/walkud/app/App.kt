@@ -4,8 +4,8 @@ import android.app.Application
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.walkud.app.utils.ContextUtil
 import com.walkud.app.utils.DisplayManager
-import kotlin.properties.Delegates
 
 /**
  * Application
@@ -13,18 +13,10 @@ import kotlin.properties.Delegates
  */
 class App : Application() {
 
-    companion object {
-        val TAG: String = App::class.java.simpleName
-
-        var instance: App by Delegates.notNull()
-            private set
-
-    }
-
     override fun onCreate() {
         super.onCreate()
 
-        instance = this
+        ContextUtil.setContext(this)
 
         initLog()
         DisplayManager.init(this)//初始化UI显示工具类
